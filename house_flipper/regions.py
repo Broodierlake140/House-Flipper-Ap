@@ -22,17 +22,56 @@ regions_rules_tables: dict[str, list[HouseFlipperConnectionRules]] = {
     "Ex-Boyfriend Stole The Radiator From My House": [
         HouseFlipperConnectionRules("Menu", True_())
     ],
+    "Ex-Boyfriend Stole The Radiator From My House - Clean Dirt": [
+        HouseFlipperConnectionRules("Ex-Boyfriend Stole The Radiator From My House", Has("Mop"))
+    ],
+    "Ex-Boyfriend Stole The Radiator From My House - Remove Trash": [
+        HouseFlipperConnectionRules("Ex-Boyfriend Stole The Radiator From My House", True_())
+    ],
+    "Ex-Boyfriend Stole The Radiator From My House - Completions": [
+        HouseFlipperConnectionRules("Ex-Boyfriend Stole The Radiator From My House", Has("Mop"))
+    ],
     "Cleaning The Garage": [
         HouseFlipperConnectionRules("Menu", Has("Job Unlock: Cleaning The Garage"))
+    ],
+    "Cleaning The Garage - Clean Dirt": [
+        HouseFlipperConnectionRules("Cleaning The Garage", Has("Mop"))
+    ],
+    "Cleaning The Garage - Remove Trash": [
+        HouseFlipperConnectionRules("Cleaning The Garage", True_())
+    ],
+    "Cleaning The Garage - Clean Windows": [
+        HouseFlipperConnectionRules("Cleaning The Garage", Has("Window Cleaner"))
+    ],
+    "Cleaning The Garage - Completions": [
+        HouseFlipperConnectionRules("Cleaning The Garage", HasAll("Window Cleaner", "Mop"))
     ],
     "Radiators.": [
         HouseFlipperConnectionRules("Menu", Has("Job Unlock: Radiators."))
     ],
+    "Radiators. - Completions": [
+        HouseFlipperConnectionRules("Radiators.", True_())
+    ],
     "Amaranth Walls": [
         HouseFlipperConnectionRules("Menu", Has("Job Unlock: Amaranth Walls"))
     ],
+    "Amaranth Walls - Living Room: Paint": [
+        HouseFlipperConnectionRules("Amaranth Walls", Has("Painting Tool"))
+    ],
+    "Amaranth Walls - Completions": [
+        HouseFlipperConnectionRules("Amaranth Walls - Living Room: Paint", True_())
+    ],
     "Baby On The Way": [
         HouseFlipperConnectionRules("Menu", Has("Job Unlock: Baby on the way"))
+    ],
+    "Baby On The Way - Clean Dirt": [
+        HouseFlipperConnectionRules("Baby On The Way", Has("Mop"))
+    ],
+    "Baby On The Way - Paint": [
+        HouseFlipperConnectionRules("Baby On The Way", Has("Painting Tool"))
+    ],
+    "Baby On The Way - Windows": [
+        HouseFlipperConnectionRules("Baby On The Way", Has("Window Cleaner"))
     ],
     "Additional Walls": [
         HouseFlipperConnectionRules("Menu", Has("Job Unlock: Additional Walls"))
