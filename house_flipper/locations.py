@@ -3,11 +3,26 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from BaseClasses import ItemClassification, Location
+from rule_builder.rules import HasAll
 
 from . import items
 
+from dataclasses import dataclass
+
 if TYPE_CHECKING:
     from .world import HouseFlipperWorld
+
+class HouseFlipperLocation(Location):
+    game = "House Flipper"
+
+@dataclass()
+class event_info():
+    location: str
+    item: str
+
+
+def get_location_names_with_ids(location_names: list[str]) -> dict[str, int | None]:
+    return {location_name: LOCATION_NAME_TO_ID[location_name] for location_name in location_names}
 
 LOCATION_NAME_TO_ID = {
     #Ex-Boyfriend Stole The Radiator From My House
@@ -85,7 +100,7 @@ LOCATION_NAME_TO_ID = {
     "Baby On The Way - Living Room: Complete": 5030,
     "Baby On The Way - Living Room: Remove Trash": 5031,
     "Baby On The Way - Living Room: Remove Dirt": 5032,
-    "Baby On The Way - Living Room: Clean The Windows": 5032,
+    "Baby On The Way - Living Room: Clean The Windows": 5033,
 
     #Baby On The Way: Bedroom
     "Baby On The Way - Bedroom: Complete": 5040,
@@ -138,9 +153,179 @@ LOCATION_NAME_TO_ID = {
     "Walls To Knock Down - Bedroom: Complete": 7040,
     "Walls To Knock Down - Bedroom: Paint Walls": 7041,
     
-    
-    #Student's House To Clean Up
-    "Student's House To Clean Up": 8000,
-    
-    #Student's House To Clean Up: 
 }
+
+Location_Regions = {
+    #Ex-Boyfriend Stole The Radiator From My House
+    "Ex-Boyfriend Stole The Radiator From My House: Complete": "Ex-Boyfriend Stole The Radiator From My House - Mop",
+
+    #Ex-Boyfriend Stole The Radiator From My House: Living Room
+    "Ex-Boyfriend Stole The Radiator From My House - Living Room: Complete": "Ex-Boyfriend Stole The Radiator From My House - Mop",
+    "Ex-Boyfriend Stole The Radiator From My House - Living Room: Remove Trash": "Ex-Boyfriend Stole The Radiator From My House",
+    "Ex-Boyfriend Stole The Radiator From My House - Living Room: Clean Dirt": "Ex-Boyfriend Stole The Radiator From My House - Mop",
+    "Ex-Boyfriend Stole The Radiator From My House - Living Room: Mount Radiator": "Ex-Boyfriend Stole The Radiator From My House",
+    
+    #Ex-Boyfriend Stole The Radiator From My House: Bedroom
+    "Ex-Boyfriend Stole The Radiator From My House - Bedroom: Complete": "Ex-Boyfriend Stole The Radiator From My House - Mop",
+    "Ex-Boyfriend Stole The Radiator From My House - Bedroom: Remove trash": "Ex-Boyfriend Stole The Radiator From My House",
+    "Ex-Boyfriend Stole The Radiator From My House - Bedroom: Clean Dirt": "Ex-Boyfriend Stole The Radiator From My House - Mop",
+    
+    #Ex-Boyfriend Stole The Radiator From My House: Bathroom
+    "Ex-Boyfriend Stole The Radiator From My House - Bathroom: Complete": "Ex-Boyfriend Stole The Radiator From My House - Mop",
+    "Ex-Boyfriend Stole The Radiator From My House - Bathroom: Clean Dirt": "Ex-Boyfriend Stole The Radiator From My House - Mop",
+    
+    #Cleaning The Garage
+    "Cleaning The Garage: Complete": "Cleaning The Garage - Completions",
+    "Cleaning The Garage: Remove Trash ": "Cleaning The Garage",
+    "Cleaning The Garage: Clean Dirt": "Cleaning The Garage - Mop",
+    "Cleaning The Garage: Clean The Window": "Cleaning The Garage - Window Cleaner",
+    
+    #Radiators
+    "Radiators.: Complete": "Radiators.",
+    
+    #Radiators: Bedroom
+    "Radiators. - Bedroom: Complete": "Radiators.",
+    "Radiators. - Bedroom: Mount Radiator": "Radiators.",
+    
+    #Radiators: Office
+    "Radiators. - Office: Complete": "Radiators.",
+    "Radiators. - Office: Mount Radiator": "Radiators.",
+    
+    #Radiators: Toilet
+    "Radiators. - Toilet: Complete": "Radiators.",
+    "Radiators. - Toilet: Mount Sink": "Radiators.",
+    "Radiators. - Toilet: Mount Towel Radiator": "Radiators.",
+    
+    #Amaranth Walls
+    "Amaranth Walls: Complete": "Amaranth Walls - Living Room: Painting",
+    
+    #Amaranth Walls: Corridor
+    "Amaranth Walls - Corridor: Complete": "Amaranth Walls",
+    "Amaranth Walls - Corridor: Repair Electrical Outlet": "Amaranth Walls",
+    
+    #Amaranth Walls: Living Room
+    "Amaranth Walls - Living Room With Kitchenette: Complete": "Amaranth Walls - Living Room: Painting",
+    "Amaranth Walls - Living Room With Kitchenette: Repair Electrical Outlet": "Amaranth Walls",
+    "Amaranth Walls - Living Room With Kitchenette: Paint": "Amaranth Walls - Living Room: Painting",
+    
+    #Baby On The Way
+    "Baby On The Way: Complete": "Baby On The Way - Completions",
+    
+    #Baby On The Way: Room
+    "Baby On The Way - Room: Complete": "Baby On The Way - Completions",
+    "Baby On The Way - Room: Remove Trash": "Baby On The Way",
+    "Baby On The Way - Room: Clean Dirt": "Baby On The Way - Mop",
+    "Baby On The Way - Room: Clean The Windows": "Baby On The Way - Window Cleaner",
+    "Baby On The Way - Room: Paint":  "Baby On The Way - Painting",
+    "Baby On The Way - Room: Place Crib": "Baby On The Way",
+    "Baby On The Way - Room: Place Bookcase": "Baby On The Way",
+    "Baby On The Way - Room: Place Cabinet With Changing Table": "Baby On The Way",
+    "Baby On The Way - Room: Place Both Poufs": "Baby On The Way",
+    
+    #Baby On The Way: Corridor
+    "Baby On The Way - Corridor: Complete": "Baby On The Way - Mop",
+    "Baby On The Way - Corridor: Remove Trash": "Baby On The Way",
+    "Baby On The Way - Corridor: Clean Dirt": "Baby On The Way - Mop",
+    
+    #Baby On The Way: Living Room
+    "Baby On The Way - Living Room: Complete": "Baby On The Way - Living Room",
+    "Baby On The Way - Living Room: Remove Trash": "Baby On The Way",
+    "Baby On The Way - Living Room: Remove Dirt": "Baby On The Way - Mop",
+    "Baby On The Way - Living Room: Clean The Windows": "Baby On The Way - Window Cleaner",
+    
+    #Baby On The Way: Bedroom
+    "Baby On The Way - Bedroom: Complete": "Baby On The Way - Living Room",
+    "Baby On The Way - Bedroom: Remove Trash": "Baby On The Way",
+    "Baby On The Way - Bedroom: Clean Dirt": "Baby On The Way - Mop",
+    "Baby On The Way - Bedroom: Clean Windows": "Baby On The Way - Window Cleaner",
+    
+    #Baby On The Way: Bathroom
+    "Baby On The Way - Bathroom: Complete": "Baby On The Way - Living Room",
+    "Baby On The Way - Bathroom: Clean Dirt": "Baby On The Way - Mop",
+    "Baby On The Way - Bathroom: Clean Windows": "Baby On The Way - Window Cleaner",
+    
+    
+    #Additional Walls
+    "Additional Walls: Complete": "Additional Walls - Completions",
+    
+    #Additional Walls: Children's Room
+    "Additional Walls - Children's Room: Complete": "Additional Walls - Completions",
+    "Additional Walls - Children's Room: Repair Electrical Outlet": "Additional Walls",
+    "Additional Walls - Children's Room: Destroy Walls": "Additional Walls - Demolition",
+    "Additional Walls - Children's Room: Build Walls": "Additional Walls - Build Walls",
+    "Additional Walls - Children's Room: Remove Crib": "Additional Walls",
+    "Additional Walls - Children's Room: Place Bed Grill": "Additional Walls",
+    
+    #Additional Walls: Room
+    "Additional Walls - Room: Complete": "Additional Walls - Demolition",
+    "Additional Walls - Room: Destroy Walls": "Additional Walls - Demolition",
+    
+    #Additional Walls: Living Room
+    "Additional Walls - Living Room: Complete": "Additional Walls",
+    "Additional Walls - Living Room: Repair Electrical Outlet": "Additional Walls",
+    
+    
+    #Walls To Knock Down
+    "Walls To Knock Down: Complete": "Walls To Knock Down - Completions",
+    
+    #Walls To Knock Down: Living Room
+    "Walls To Knock Down - Living Room: Complete": "Walls To Knock Down - Demolition",
+    "Walls To Knock Down - Living Room: Destroy The Walls": "Walls To Knock Down - Demolition",
+    
+    #Walls To Knock Down: Corridor
+    "Walls To Knock Down - Corridor: Complete": "Walls To Knock Down - Demolition",
+    "Walls To Knock Down - Corridor: Destroy The Walls": "Walls To Knock Down - Demolition",
+    
+    #Walls To Knock Down: Large Kitchen
+    "Walls To Knock Down - Large Kitchen: Complete": "Walls To Knock Down - Demolition",
+    "Walls To Knock Down - Large Kitchen: Destroy Walls": "Walls To Knock Down - Demolition",
+    
+    #Walls To Knock Down: Bedroom
+    "Walls To Knock Down - Bedroom: Complete": "Walls To Knock Down - Paint",
+    "Walls To Knock Down - Bedroom: Paint Walls": "Walls To Knock Down - Paint",
+
+}
+event_locations: dict[str, list[event_info]] = {
+    "Ex-Boyfriend Stole The Radiator From My House - Mop": [
+        event_info("Completed Ex-Boyfriend Stole The Radiator From My House", "Completed Ex-Boyfriend Stole The Radiator From My House")
+    ],
+    "Cleaning The Garage - Completions": [
+        event_info("Completed Cleaning The Garage", "Completed Cleaning The Garage")
+    ],
+    "Radiators.": [
+        event_info("Completed Radiators.", "Completed Radiators.")
+    ],
+    "Amaranth Walls - Living Room: Painting": [
+        event_info("Completed Amaranth Walls", "Completed Amaranth Walls")
+    ],
+    "Baby On The Way - Completions": [
+        event_info("Completed Baby On The Way", "Completed Baby On The Way")
+    ],
+    "Additional Walls - Completions" : [
+        event_info("Completed Additional Walls", "Completed Additional Walls")
+    ],
+    "Walls To Knock Down - Completions" : [
+        event_info("Completed Walls To Knock Down", "Completed Walls To Knock Down")
+    ],
+}
+    
+
+
+
+def create_all_locations(world: HouseFlipperWorld) -> None:
+    create_regular_locations(world)
+    create_events(world)
+
+def create_regular_locations(world: HouseFlipperWorld) -> None:
+    for x in Location_Regions.keys():
+        region = world.get_region(Location_Regions[x])
+        loc = get_location_names_with_ids([x])
+        region.add_locations(loc, HouseFlipperLocation)
+        
+
+def create_events(world: HouseFlipperWorld) -> None:
+    for x in event_locations.keys():
+            for loc in event_locations[x]:
+                region = world.get_region(x)
+                region.add_event(loc.location, loc.item)
+    world.set_completion_rule(HasAll("Completed Ex-Boyfriend Stole The Radiator From My House", "Completed Cleaning The Garage", "Completed Radiators.", "Completed Amaranth Walls", "Completed Baby On The Way", "Completed Additional Walls", "Completed Walls To Knock Down"))

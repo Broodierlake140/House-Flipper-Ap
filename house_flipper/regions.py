@@ -1,10 +1,12 @@
-from __future__ import anotations
+from __future__ import annotations
 
+import logging
+from logging import log
 from typing import TYPE_CHECKING
 
 from BaseClasses import Entrance, Region
+from rule_builder.rules import Has, HasAll, Rule, True_
 
-from house_flipper.regions import HouseFlipperConnectionRules
 
 if TYPE_CHECKING:
     from .world import HouseFlipperWorld
@@ -22,25 +24,16 @@ regions_rules_tables: dict[str, list[HouseFlipperConnectionRules]] = {
     "Ex-Boyfriend Stole The Radiator From My House": [
         HouseFlipperConnectionRules("Menu", True_())
     ],
-    "Ex-Boyfriend Stole The Radiator From My House - Clean Dirt": [
-        HouseFlipperConnectionRules("Ex-Boyfriend Stole The Radiator From My House", Has("Mop"))
-    ],
-    "Ex-Boyfriend Stole The Radiator From My House - Remove Trash": [
-        HouseFlipperConnectionRules("Ex-Boyfriend Stole The Radiator From My House", True_())
-    ],
-    "Ex-Boyfriend Stole The Radiator From My House - Completions": [
+    "Ex-Boyfriend Stole The Radiator From My House - Mop": [
         HouseFlipperConnectionRules("Ex-Boyfriend Stole The Radiator From My House", Has("Mop"))
     ],
     "Cleaning The Garage": [
         HouseFlipperConnectionRules("Menu", Has("Job Unlock: Cleaning The Garage"))
     ],
-    "Cleaning The Garage - Clean Dirt": [
+    "Cleaning The Garage - Mop": [
         HouseFlipperConnectionRules("Cleaning The Garage", Has("Mop"))
     ],
-    "Cleaning The Garage - Remove Trash": [
-        HouseFlipperConnectionRules("Cleaning The Garage", True_())
-    ],
-    "Cleaning The Garage - Clean Windows": [
+    "Cleaning The Garage - Window Cleaner": [
         HouseFlipperConnectionRules("Cleaning The Garage", Has("Window Cleaner"))
     ],
     "Cleaning The Garage - Completions": [
@@ -49,94 +42,54 @@ regions_rules_tables: dict[str, list[HouseFlipperConnectionRules]] = {
     "Radiators.": [
         HouseFlipperConnectionRules("Menu", Has("Job Unlock: Radiators."))
     ],
-    "Radiators. - Completions": [
-        HouseFlipperConnectionRules("Radiators.", True_())
-    ],
     "Amaranth Walls": [
         HouseFlipperConnectionRules("Menu", Has("Job Unlock: Amaranth Walls"))
     ],
-    "Amaranth Walls - Living Room: Paint": [
+    "Amaranth Walls - Living Room: Painting": [
         HouseFlipperConnectionRules("Amaranth Walls", Has("Painting Tool"))
     ],
-    "Amaranth Walls - Completions": [
-        HouseFlipperConnectionRules("Amaranth Walls - Living Room: Paint", True_())
-    ],
     "Baby On The Way": [
-        HouseFlipperConnectionRules("Menu", Has("Job Unlock: Baby on the way"))
+        HouseFlipperConnectionRules("Menu", Has("Job Unlock: Baby On The Way"))
     ],
-    "Baby On The Way - Clean Dirt": [
+    "Baby On The Way - Mop": [
         HouseFlipperConnectionRules("Baby On The Way", Has("Mop"))
     ],
-    "Baby On The Way - Paint": [
+    "Baby On The Way - Painting": [
         HouseFlipperConnectionRules("Baby On The Way", Has("Painting Tool"))
     ],
-    "Baby On The Way - Windows": [
+    "Baby On The Way - Window Cleaner": [
         HouseFlipperConnectionRules("Baby On The Way", Has("Window Cleaner"))
+    ],
+    "Baby On The Way - Completions": [
+        HouseFlipperConnectionRules("Baby On The Way", HasAll("Mop", "Window Cleaner", "Painting Tool"))
+    ],
+    "Baby On The Way - Living Room": [
+        HouseFlipperConnectionRules("Baby On The Way", HasAll("Mop", "Window Cleaner"))
     ],
     "Additional Walls": [
         HouseFlipperConnectionRules("Menu", Has("Job Unlock: Additional Walls"))
     ],
+    "Additional Walls - Demolition": [
+        HouseFlipperConnectionRules("Additional Walls", Has("Demolition Tool"))
+    ],
+    "Additional Walls - Build Walls": [
+        HouseFlipperConnectionRules("Additional Walls", Has("Build Walls Tool"))
+    ],
+    "Additional Walls - Completions": [
+        HouseFlipperConnectionRules("Additional Walls", HasAll("Build Walls Tool", "Demolition Tool"))
+    ],
     "Walls To Knock Down": [
         HouseFlipperConnectionRules("Menu", Has("Job Unlock: Walls To Knock Down"))
     ],
-    "Student's House To Clean Up": [
-        HouseFlipperConnectionRules("Menu", Has("Job Unlock: Student's House To Clean Up"))
+    "Walls To Knock Down - Demolition": [
+        HouseFlipperConnectionRules("Walls To Knock Down", Has("Demolition Tool"))
     ],
-    "Save Me From These Horrible Colors Honey": [
-        HouseFlipperConnectionRules("Menu", Has("Job Unlock: Save Me From These Horrible Colors Honey"))
+    "Walls To Knock Down - Paint": [
+        HouseFlipperConnectionRules("Walls To Knock Down", Has("Painting Tool"))
     ],
-    "Necessary Extra Bathroom": [
-        HouseFlipperConnectionRules("Menu", Has("Job Unlock: Necessary Extra Bathroom"))
+    "Walls To Knock Down - Completions": [
+        HouseFlipperConnectionRules("Walls To Knock Down", HasAll("Demolition Tool", "Painting Tool"))
     ],
-    "Bathroom And Home Workshop": [
-        HouseFlipperConnectionRules("Menu", Has("Job Unlock: Bathroom And Home Workshop"))
-    ],
-    "Clean Up The House, Please": [
-        HouseFlipperConnectionRules("Menu", Has("Job Unlock: Clean Up The House, Please"))
-    ],
-    "Aunt's Home To Redecorate": [
-        HouseFlipperConnectionRules("Menu", Has("Job Unlock: Aunt's Home To Redecorate"))
-    ],
-    "House In Need Of A Renovation": [
-        HouseFlipperConnectionRules("Menu", Has("Job Unlock: House In Need Of A Renovation"))
-    ],
-    "Painting The House": [
-        HouseFlipperConnectionRules("Menu", Has("Job Unlock: Painting The House"))
-    ],
-    "Garage :)": [
-        HouseFlipperConnectionRules("Menu", Has("Job Unlock: Garage :)"))
-    ],
-    "Christmas Cleaning!": [
-        HouseFlipperConnectionRules("Menu", Has("Job Unlock: Christmas Cleaning!"))
-    ],
-    "It's Christmas Once Again": [
-        HouseFlipperConnectionRules("Menu", Has("Job Unlock: It's Christmas Once Again"))
-    ],
-    "House To Refresh, Need Help!": [
-        HouseFlipperConnectionRules("Menu", Has("Job Unlock: House To Refresh, Need Help!"))
-    ],
-    "Kindergarten": [
-        HouseFlipperConnectionRules("Menu", Has("Job Unlock: Kindergarten"))  
-    ],
-    "Sauna And Base Build": [
-        HouseFlipperConnectionRules("Menu", Has("Job Unlock: Sauna And Base Build"))
-    ],
-    "All Out Gaming Room": [
-        HouseFlipperConnectionRules("Menu", Has("Job Unlock: All Out Gaming Room"))
-    ],
-    "Colorful Fiesta": [
-        HouseFlipperConnectionRules("Menu", Has("Job Unlock: Colorful Fiesta"))
-    ],
-    "Let's Keep The Tradition Alive": [
-        HouseFlipperConnectionRules("Menu", Has("Job Unlock: Let's Keep The Tradition Alive"))
-    ],
-    "What A Waste Of Money": [
-        HouseFlipperConnectionRules("Menu", Has("Job Unlock: What A Waste Of Money"))
-    ],
-    "Save My Christmas": [
-        HouseFlipperConnectionRules("Menu", Has("Job Unlock: Save My Christmas"))
-    ],
-    
 }
 
 def create_and_connect_regions(world: HouseFlipperWorld) -> None:
@@ -144,11 +97,13 @@ def create_and_connect_regions(world: HouseFlipperWorld) -> None:
     connect_regions(world)
 
 def create_all_regions(world: HouseFlipperWorld) -> None:
-    Regions = ["Ex-Boyfriend Stole The Radiator From My House", "Cleaning The Garage", "Radiators.", "Amaranth Walls", "Baby On The Way", "Additional Walls", "Walls To Knock Down", "Student's House To Clean Up", "Save Me From These Horrible Colors Honey", "Necessary Extra Bathroom", "Bathroom And Home Workshop", "Clean Up The House, Please", "Aunt's Home To Redecorate", "House In Need Of A Renovation", "Painting The House", "Garage :)", "Christmas Cleaning", "It's Christmas Once Again", "House To Refresh, Need Help!", "Kindergarten", "Sauna And Base Build", "All Out Gaming Room", "Colorful Fiesta", "Let's Keep The Tradition Alive", "What A Waste Of Money", "Save My Christmas"]
-    for x in Regions:
-        world.multiworld.regions += Region(x, world.player, world.multiworld)
-    
+    region_list = [Region("Menu", world.player, world.multiworld)]
+    for x in regions_rules_tables.keys():
+        region_list.append(Region(x, world.player, world.multiworld))
+    world.multiworld.regions += region_list
+    logging.info(region_list)
+
 def connect_regions(world: HouseFlipperWorld) -> None:
-    for x in Regions_Connections:
-         region = world.get_region(x)
-             
+    for x in regions_rules_tables.keys():
+        for entrance in regions_rules_tables[x]:
+            world.create_entrance(world.get_region(entrance.source), world.get_region(x), entrance.rule)
