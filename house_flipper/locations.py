@@ -1,10 +1,11 @@
 from __future__ import annotations
 
+import logging
 from typing import TYPE_CHECKING
 
 from BaseClasses import ItemClassification, Location
-from rule_builder.rules import HasAll
-
+from rule_builder.rules import HasAll, HasFromList, Has, OptionFilter
+from . import options as houseflipper_options
 from . import items
 
 from dataclasses import dataclass
@@ -313,8 +314,9 @@ event_locations: dict[str, list[event_info]] = {
 
 
 def create_all_locations(world: HouseFlipperWorld) -> None:
-    create_regular_locations(world)
     create_events(world)
+    create_regular_locations(world)
+
 
 def create_regular_locations(world: HouseFlipperWorld) -> None:
     for x in Location_Regions.keys():
@@ -323,9 +325,52 @@ def create_regular_locations(world: HouseFlipperWorld) -> None:
         region.add_locations(loc, HouseFlipperLocation)
         
 
+def  goal(string: str):
+    goal_list = []
+    if houseflipper_options.Ex == True:
+        goal_list.append("Completed Ex-Boyfriend Stole The Radiator From My House")
+    if houseflipper_options.Garage == True:
+        goal_list.append("Completed Cleaning The Garage")
+    if houseflipper_options.Radiators == True:
+        goal_list.append("Completed Radiators.")
+    if houseflipper_options.Amaranth == True:
+        goal_list.append("Completed Amaranth Walls")
+    if houseflipper_options.Baby == True:
+        goal_list.append("Completed Baby On The Way")
+    if houseflipper_options.AddWalls == True:
+        goal_list.append("Completed Additional Walls")
+    if houseflipper_options.KnockWalls == True:
+        goal_list.append("Completed Walls To Knock Down")
+    if not goal_list:
+        goal_list.append("Completed Ex-Boyfriend Stole The Radiator From My House")
+    for str in goal_list:
+        logging.info(goal_list)
+        logging.info("String")
+        if str == string:
+            logging.info(str)
+            return str
+    return ""
 def create_events(world: HouseFlipperWorld) -> None:
     for x in event_locations.keys():
             for loc in event_locations[x]:
-                region = world.get_region(x)
-                region.add_event(loc.location, loc.item)
-    world.set_completion_rule(HasAll("Completed Ex-Boyfriend Stole The Radiator From My House", "Completed Cleaning The Garage", "Completed Radiators.", "Completed Amaranth Walls", "Completed Baby On The Way", "Completed Additional Walls", "Completed Walls To Knock Down"))
+                if goal(loc.location) != "":
+                    #logging.info(loc.location)
+                    region = world.get_region(x)
+                    region.add_event(loc.location, loc.item)
+                    
+    world.set_completion_rule(
+        ((Has("Completed Ex-Boyfriend Stole The Radiator From My House") | OptionFilter(houseflipper_options.Ex, 1))
+         | [OptionFilter(houseflipper_options.Ex, 0),
+         OptionFilter(houseflipper_options.Garage, 0),
+         OptionFilter(houseflipper_options.Radiators, 0),
+         OptionFilter(houseflipper_options.Amaranth, 0), 
+         OptionFilter(houseflipper_options.Baby, 0), 
+         OptionFilter(houseflipper_options.AddWalls, 0),
+         OptionFilter(houseflipper_options.KnockWalls, 0)]) &
+        (Has("Completed Cleaning The Garage") | OptionFilter(houseflipper_options.Garage, 0)) &
+        (Has("Completed Radiators.") | OptionFilter(houseflipper_options.Radiators, 0)) &
+        (Has("Completed Amaranth Walls") | OptionFilter(houseflipper_options.Amaranth, 0)) &
+        (Has("Completed Baby On The Way") | OptionFilter(houseflipper_options.Baby, 0)) &
+        (Has("Completed Additional Walls") | OptionFilter(houseflipper_options.AddWalls, 0)) &
+        (Has("Completed Walls To Knock Down") | OptionFilter(houseflipper_options.KnockWalls, 0)) 
+    )
