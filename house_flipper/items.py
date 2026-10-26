@@ -136,7 +136,7 @@ def create_all_items(world: HouseFlipperWorld) -> None:
             break
             
     for x in money_groups:
-        for i in range(0, money_groups[x]):
+        for i in range(0, money_groups[x]+1):
             world.push_precollected(world.create_item(str(x)+"$"))
     
     itempool: list[Item] = [
@@ -152,6 +152,10 @@ def create_all_items(world: HouseFlipperWorld) -> None:
         world.create_item("Job Unlock: Additional Walls"),
         world.create_item("Job Unlock: Walls To Knock Down"),
     ]
+    for x in world.options.starting_levels.value:
+        itempool.remove(world.create_item(x))
+        itempool.append(world.create_item(get_random_filler_item_name(world)))
+    
     num = len(itempool)
 
     num_locations = len(world.multiworld.get_unfilled_locations(world.player))

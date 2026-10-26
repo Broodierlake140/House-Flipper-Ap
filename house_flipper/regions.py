@@ -101,7 +101,6 @@ def create_all_regions(world: HouseFlipperWorld) -> None:
     for x in regions_rules_tables.keys():
         region_list.append(Region(x, world.player, world.multiworld))
     world.multiworld.regions += region_list
-    logging.info(region_list)
 
 def connect_regions(world: HouseFlipperWorld) -> None:
     for x in regions_rules_tables.keys():
